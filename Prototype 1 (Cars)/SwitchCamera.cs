@@ -20,6 +20,7 @@ public class SwitchCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         //if statement to choose main camera
         if (Input.GetButtonDown("1Key"))
         {
@@ -43,5 +44,63 @@ public class SwitchCamera : MonoBehaviour
             rearViewCam.SetActive(true);
             mainCamera.SetActive(false);
         }
+
+        */
+
+
+        if (Input.GetButtonDown("1Key"))
+        {
+            driverCam.SetActive(true);
+            rearViewCam.SetActive(false);
+            mainCamera.SetActive(false);
+        }
+        else if (Input.GetButtonUp("1Key"))
+        {
+            driverCam.SetActive(false);
+            rearViewCam.SetActive(false);
+            mainCamera.SetActive(true);
+        }
+        if (Input.GetButtonDown("2Key"))
+        {
+            driverCam.SetActive(false);
+            rearViewCam.SetActive(true);
+            mainCamera.SetActive(false);
+        }
+        else if (Input.GetButtonUp("2Key"))
+        {
+            driverCam.SetActive(false);
+            rearViewCam.SetActive(false);
+            mainCamera.SetActive(true);
+        }
+
+
+
+
+
+        /*
+        //if statement to choose main camera
+        if (Input.GetButtonDown("1Key"))
+        {
+            driverCam.SetActive(false);
+            rearViewCam.SetActive(false);
+            mainCamera.SetActive(true);
+        }
+
+        //if statement to choose driver camera
+        if (Input.GetButtonDown("2Key"))
+        {
+            driverCam.SetActive(true);
+            rearViewCam.SetActive(false);
+            mainCamera.SetActive(false);
+        }
+
+        //if statement to choose rearview camera
+        if (Input.GetButtonDown("3Key"))
+        {
+            driverCam.SetActive(false);
+            rearViewCam.SetActive(true);
+            mainCamera.SetActive(false);
+        }
+        */
     }
 }

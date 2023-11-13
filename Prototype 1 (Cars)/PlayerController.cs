@@ -1,19 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
     //private variables
-    private float speed = 25.0f;
+    private Rigidbody playerRB;
+    [SerializeField] float horsePower = 15000;
     private float turnSpeed = 45.0f;
     private float horizontalInput;
     private float forwardInput;
+    [SerializeField] GameObject centreOfMass;
+    [SerializeField] TextMeshProUGUI speedometerText;
+    [SerializeField] TextMeshProUGUI rpmText;
+    [SerializeField] float speed;
+    [SerializeField] float rPM;
 
-    //variables for camera switcher function
-    public Camera mainCamera;
-    public Camera driverCam;
-    public KeyCode switchKey;
+    [SerializeField] List<WheelCollider> allWheels;
+    [SerializeField] int wheelsOnGround;
+
 
     //
     public string inputID;
@@ -21,29 +28,58 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerRB = GetComponent<Rigidbody>();
+        playerRB.centerOfMass = centreOfMass.transform.position;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+
         //forward and horizontal controls for player input
         horizontalInput = Input.GetAxis("Horizontal" + inputID);
-        forwardInput = Input.GetAxis("Vertical"+ inputID);
+        forwardInput = Input.GetAxis("Vertical" + inputID);
 
-        //Move the vehicle forward
-        transform.Translate(Vector3.forward * Time.deltaTime * speed * forwardInput);
-        transform.Rotate(Vector3.up * Time.deltaTime * turnSpeed * horizontalInput);
 
-        //if statement to choose driver camera
-       // if (Input.GetKeyDown(switchKey))
-        //{
-       //     mainCamera.enabled = !mainCamera.enabled;
-       //     driverCam.enabled = !driverCam.enabled;
-       // }
+
+        if (IsOnGround())
+        {
+            //Move the vehicle forward
+            playerRB.AddRelativeForce(Vector3.forward * forwardInput * horsePower);
+            transform.Rotate(Vector3.up * Time.deltaTime * turnSpeed * horizontalInput);
+
+            speed = Mathf.RoundToInt(playerRB.velocity.magnitude * 2.237f);
+            speedometerText.SetText("Speed: " + speed + "mph");
+
+            rPM = (speed % 30) * 40;
+            rpmText.SetText("RPM: " + rPM);
+
+        }
+
 
     }
 
+    bool IsOnGround()
+    {
+        wheelsOnGround = 0;
+        foreach (WheelCollider wheel in allWheels)
+        {
+            if (wheel.isGrounded)
+            {
+                wheelsOnGround++;
+            }
+        }
 
+
+        if (wheelsOnGround == 4)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
 
 }
